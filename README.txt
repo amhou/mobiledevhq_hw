@@ -10,6 +10,8 @@ While a backtracking algorithm is both easy to understand and implement, it has 
 
 There are a few options to optimize this algorithm to help improve performance. Currently, we iterate through every value (1-9) for a given empty cell, and test for its validity. It is possible to parse the sudoku puzzle beforehand and eliminate certain values for cells that we know would not be valid. In addition to this constraint propagation, there are alternative algorithms that could be tried as well, such as stochastic searches, exact cover solutions, and a brute force application of a known set of possible grids.
 
+Additionally, this solver assumes your input is well formed; no input validation is performed. While the solver will tell the user if no solution is found, the next step would be to prompt the user for valid input if the given sudoku is malformed.
+
 An example execution is shown below:
 
 $ cd sudoku/
