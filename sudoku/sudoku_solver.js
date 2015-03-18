@@ -1,4 +1,42 @@
 /*
+ * Handles input from stdin.
+ */
+var main = function() {
+  process.stdin.resume();
+  process.stdin.setEncoding('utf8');
+  var board;
+
+  process.stdin.on('data', function(input) {
+    if (input === "\n") {
+      console.log("Solving Sudoku...");
+
+      // Remove trailing newline character
+      board = board.slice(0, board.length - 1);
+
+      var solvedSudoku = solveSudoku(board);
+      if (solvedSudoku) {
+        printSudoku(solvedSudoku);
+      } else {
+        console.log("No solution found");
+      }
+
+      process.exit();
+    }
+
+    if (typeof board === 'undefined') {
+      board = input;
+    } else {
+      board += input;
+    }
+  });
+}
+
+if (require.main === module) {
+  main();
+}
+
+
+/*
  * Solves a sudoku puzzle!
  *
  * Args: rawBoard = a string representation of a sudoku board, comma delimited.
@@ -13,6 +51,11 @@ var solveSudoku = function(rawBoard) {
   var emptyCells = findEmptyCells(board);
 
   for (i = 0;  i < emptyCells.length;) {
+    // Backtracking past 0, no solution found
+    if (i === -1) {
+      return false;
+    }
+
     row = emptyCells[i][0];
     column = emptyCells[i][1];
 
@@ -87,13 +130,9 @@ var findEmptyCells = function (board) {
  * Returns: true if the value is not in the cell's zone, row, or column
  */
 var checkValue = function(board, cell, value) {
-  if (checkRow(board, cell[0], value) &&
-      checkColumn(board, cell[1], value) &&
-      checkZone(board, cell, value)) {
-    return true;
-  } else {
-    return false;
-  }
+  return checkRow(board, cell[0], value) &&
+         checkColumn(board, cell[1], value) &&
+         checkZone(board, cell, value);
 }
 
 /*
@@ -136,21 +175,22 @@ var checkColumn = function(board, column, value) {
 var checkZone = function(board, cell, value) {
   var zoneLeftEdge = 0;
   var zoneTopEdge = 0;
-  var zoneWidth = 3;
+
+  const ZONE_WIDTH = 3;
 
   // Find zone's left edge
-  while (cell[1] >= zoneLeftEdge + zoneWidth) {
-    zoneLeftEdge += zoneWidth;
+  while (cell[1] >= zoneLeftEdge + ZONE_WIDTH) {
+    zoneLeftEdge += ZONE_WIDTH;
   }
 
   // Find zone's top edge
-  while (cell[0] >= zoneTopEdge + zoneWidth) {
-    zoneTopEdge += zoneWidth;
+  while (cell[0] >= zoneTopEdge + ZONE_WIDTH) {
+    zoneTopEdge += ZONE_WIDTH;
   }
 
   // Check the found zone
-  for (row = zoneTopEdge; row < zoneTopEdge + zoneWidth; row++) {
-    for (column = zoneLeftEdge; column < zoneLeftEdge + zoneWidth; column++) {
+  for (row = zoneTopEdge; row < zoneTopEdge + ZONE_WIDTH; row++) {
+    for (column = zoneLeftEdge; column < zoneLeftEdge + ZONE_WIDTH; column++) {
       if (board[row][column] === value) {
         return false;
       }
@@ -159,11 +199,25 @@ var checkZone = function(board, cell, value) {
   return true;
 }
 
+/*
+ * Prints the given sudoku puzzle.
+ *
+ * Args: board - a 9x9 2D array
+ */
+var printSudoku = function(board) {
+  board.forEach(function(row) {
+    console.log(row.join());
+  });
+}
+
 // Function exports
-exports.solveSudoku = solveSudoku;
-exports.parseBoard = parseBoard;
-exports.findEmptyCells = findEmptyCells;
-exports.checkValue = checkValue;
-exports.checkRow = checkRow;
-exports.checkColumn = checkColumn;
-exports.checkZone = checkZone;
+module.exports = {
+  solveSudoku: solveSudoku,
+  parseBoard: parseBoard,
+  findEmptyCells: findEmptyCells,
+  checkValue: checkValue,
+  checkRow: checkRow,
+  checkColumn: checkColumn,
+  checkZone: checkZone,
+  printSudoku: printSudoku
+}
