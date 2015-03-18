@@ -1,0 +1,9 @@
+1. Big O notation communicates the computational complexity of a given algorithm. An algorithm with complexity O(n) runs in an amount of time that correlates to the amount of inputs being processed, in a linear fashion. O(n^2) implies that the algorithm correlates to the squared amount of inputs being processed, in the worst case.
+
+2. The quicksort algorithm is a method in which members of an array are sorted. While its worst case has a complexity of O(n^2), in practice, it is much closer to O(n log n). Quicksort functions by selecting an element ("pivot") in the array, reordering the array so that all elements greater than the pivot come after the pivot, and all elements less than the pivot come before the pivot. These steps are then recursively applied to the subarrays on either side of the pivot, eventually resulting in a complete sort of the array.
+
+3. In C, a pointer is a variable that stores the address in memory of another variable.
+
+4. Stack memory is memory set aside for the thread of execution. Blocks are reserved for specific use by the thread, always in a Last In First Out order. A heap is memory set aside for dynamic allocation, with no enforced pattern for allocation and deallocation of blocks from the heap.
+
+5. Garbage collection is the recovery of memory being used by a program when that memory is no longer needed. The "garbage" that occupies memory is disposed of, releasing the blocks of memory for further use.
